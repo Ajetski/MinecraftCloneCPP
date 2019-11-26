@@ -4,20 +4,8 @@
 #include <GL\freeglut.h>
 #include <iostream>
 
-using namespace std;
-
-void changeViewPort(int w, int h)
-{
-	glViewport(0, 0, w, h);
-}
-
-void render()
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glutSwapBuffers();
-}
-
-
+void changeViewPort(int w, int h);
+void render();
 
 int main(int argc, char* argv[]) {
 
@@ -44,4 +32,15 @@ int main(int argc, char* argv[]) {
 
 	glutMainLoop();
 	return 0;
+}
+
+void changeViewPort(int w, int h) {
+
+	glViewport(0, 0, w, h);
+}
+
+void render() {
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glutSwapBuffers();
 }
