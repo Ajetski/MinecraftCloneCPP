@@ -4,6 +4,7 @@
 #include <GL\freeglut.h>
 #include <iostream>
 
+<<<<<<< Updated upstream
 using namespace std;
 
 void changeViewPort(int w, int h)
@@ -18,9 +19,13 @@ void render()
 }
 
 
+=======
+void init();
+void render();
+void reshape(int w, int h);
+>>>>>>> Stashed changes
 
 int main(int argc, char* argv[]) {
-
 	// Initialize GLUT
 	glutInit(&argc, argv);
 	// Set up some memory buffers for our display
@@ -30,7 +35,7 @@ int main(int argc, char* argv[]) {
 	// Create the window with the title "Hello,GL"
 	glutCreateWindow("Hello, GL");
 	// Bind the two functions (above) to respond when necessary
-	glutReshapeFunc(changeViewPort);
+	glutReshapeFunc(reshape);
 	glutDisplayFunc(render);
 
 	// Very important!  This initializes the entry points in the OpenGL driver so we can 
@@ -41,7 +46,30 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
+	init();
 
 	glutMainLoop();
 	return 0;
+<<<<<<< Updated upstream
 }
+=======
+}
+
+void init() {
+	glClearColor(0.2, 1.0, 0.7, 1.0);
+}
+
+void render() {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+	glutSwapBuffers();
+}
+
+void reshape(int w, int h) {
+	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+}
+
+>>>>>>> Stashed changes
