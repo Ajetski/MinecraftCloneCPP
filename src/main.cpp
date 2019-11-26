@@ -4,26 +4,10 @@
 #include <GL\freeglut.h>
 #include <iostream>
 
-<<<<<<< Updated upstream
-using namespace std;
 
-void changeViewPort(int w, int h)
-{
-	glViewport(0, 0, w, h);
-}
-
-void render()
-{
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glutSwapBuffers();
-}
-
-
-=======
 void init();
 void render();
 void reshape(int w, int h);
->>>>>>> Stashed changes
 
 int main(int argc, char* argv[]) {
 	// Initialize GLUT
@@ -50,9 +34,6 @@ int main(int argc, char* argv[]) {
 
 	glutMainLoop();
 	return 0;
-<<<<<<< Updated upstream
-}
-=======
 }
 
 void init() {
@@ -72,4 +53,3 @@ void reshape(int w, int h) {
 
 }
 
->>>>>>> Stashed changes
