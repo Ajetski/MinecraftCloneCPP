@@ -43,6 +43,16 @@ void init() {
 void render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
+	
+	glPointSize(10.0);
+	//draw
+	glBegin(GL_QUADS);
+	glVertex2f(0.0, 5.0);
+	glVertex2f(4.0, -3.0);
+	glVertex2f(-4.0, -3.0);
+	glVertex2f(-4.0, 5.0);
+	glEnd();
+	
 	glutSwapBuffers();
 }
 
@@ -50,6 +60,7 @@ void reshape(int w, int h) {
 	glViewport(0, 0, (GLsizei) w, (GLsizei) h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-
+	gluOrtho2D(-10, 10, -10, 10);
+	glMatrixMode(GL_MODELVIEW);
 }
 
