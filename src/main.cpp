@@ -4,7 +4,6 @@
 #include <GL\freeglut.h>
 #include <iostream>
 
-
 void init();
 void timer(int);
 void update();
@@ -51,15 +50,12 @@ void timer(int) {
 	glutTimerFunc(1000 / 60, timer, 0);
 }
 
-
 //control animation
 float z = -10;
 int state = 1;
 float ang = 0;
 
-
 void update() {
-
 	ang += 1.6;
 	if (ang > 360.0) {
 		ang = 0;
@@ -142,8 +138,6 @@ void render() {
 	glVertex3f(1.0, -1.0, 1.0);
 	glVertex3f(1.0, -1.0, -1.0);
 	glEnd();
-
-	
 
 	glutSwapBuffers();
 }
