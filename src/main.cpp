@@ -1,8 +1,10 @@
-//Jeff Chastine
 #include <Windows.h>
 #include <GL\glew.h>
 #include <GL\freeglut.h>
 #include <iostream>
+
+#define STD_IMAGE_IMPLEMENTATION
+#include "libraries/std_image/stb_image.h"
 
 void init();
 void timer(int);
@@ -42,6 +44,7 @@ int main(int argc, char* argv[]) {
 void init() {
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_MULTISAMPLE);
 }
 
 void timer(int) {
@@ -56,7 +59,7 @@ int state = 1;
 float ang = 0;
 
 void update() {
-	ang += 1.6;
+	ang += .8;
 	if (ang > 360.0) {
 		ang = 0;
 	}
@@ -88,18 +91,7 @@ void drawSquare() {
 	glEnd();
 }
 
-
-void render() {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-	glLoadIdentity();
-
-	glTranslatef(0.0, 0.0, -8.0);
-	glRotatef(ang, 1, 0, 0);
-	glRotatef(ang, 0, 1, 0);
-	glRotatef(ang, 0, 0, 1);
-	
-	//drawSquare();
-
+void drawCube() {
 	glBegin(GL_QUADS);
 	//front
 	glColor3f(1.0, 0.0, 0.0);
@@ -138,6 +130,24 @@ void render() {
 	glVertex3f(1.0, -1.0, 1.0);
 	glVertex3f(1.0, -1.0, -1.0);
 	glEnd();
+}
+
+
+void render() {
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	glLoadIdentity();
+
+	
+	for (float i = -2.0; i < 2.1; i += 2) {
+		for (float j = -2.0; j < 2.1; j += 2) {
+			glLoadIdentity();
+			glTranslatef(i, j, -8.0);
+			glRotatef(ang, 1, 1, 1);
+			drawCube();
+		}
+	}
+
+	
 
 	glutSwapBuffers();
 }
