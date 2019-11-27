@@ -59,9 +59,9 @@ int state = 1;
 float ang = 0;
 
 void update() {
-	ang += .8;
+	ang += .8f;
 	if (ang > 360.0) {
-		ang = 0;
+		ang -= 360.0f;
 	}
 	/*
 	if (state == 1) {
@@ -141,13 +141,11 @@ void render() {
 	for (float i = -2.0; i < 2.1; i += 2) {
 		for (float j = -2.0; j < 2.1; j += 2) {
 			glLoadIdentity();
-			glTranslatef(i, j, -8.0);
-			glRotatef(ang, 1, 1, 1);
+			glRotatef(ang, 0, 1, 0);
+			glTranslatef(i, j, -8.0);			
 			drawCube();
 		}
 	}
-
-	
 
 	glutSwapBuffers();
 }
