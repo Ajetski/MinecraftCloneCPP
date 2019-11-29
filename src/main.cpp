@@ -3,8 +3,8 @@
 #include <GL\freeglut.h>
 #include <iostream>
 
-#define STD_IMAGE_IMPLEMENTATION
-#include "libraries/std_image/stb_image.h"
+//#define STD_IMAGE_IMPLEMENTATION
+//#include "libraries/std_image/stb_image.h"
 
 void init();
 void timer(int);
@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
 	// Set the window size
 	glutInitWindowSize(920, 920);
 	// Create the window with the title "Hello,GL"
-	glutCreateWindow("Hello, GL");
+	glutCreateWindow("Minecraft Clone CPP");
 	// Bind the two functions (above) to respond when necessary
 	glutReshapeFunc(reshape);
 	glutDisplayFunc(render);
