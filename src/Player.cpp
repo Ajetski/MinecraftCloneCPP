@@ -1,6 +1,5 @@
 #include "Player.hpp"
 #include <GL\glew.h>
-#include <iostream>
 
 void Player::setCamera() {
 	glLoadIdentity();
@@ -45,3 +44,4 @@ const float& Player::roll() const {
 const float& Player::yaw() const {
 	return rot_yaw;
 }
+
