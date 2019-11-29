@@ -4,9 +4,21 @@
 #include <iostream>
 #include "GameEngine.hpp"
 
+void reshapeFunc(int, int);
+void drawFunc();
+void timerFunc(int);
+
+GameEngine* engine;
+
 GameEngine::GameEngine() {
-	player = new Player;
-	map = new Map;
+	player_var = new Player;
+	map_var = new Map;
+
+	reshape = reshapeFunc;
+	draw = drawFunc;
+	timer = timerFunc;
+
+	engine = this;
 }
 
 int GameEngine::init(int* argcp, char **argv) {
@@ -30,9 +42,9 @@ int GameEngine::init(int* argcp, char **argv) {
 	}
 
 	//set glut/gl functions
-	glutReshapeFunc(this->reshape);
-	glutDisplayFunc(this->draw);
-	glutTimerFunc(0, this->timer, 0);
+	glutReshapeFunc(reshape);
+	glutDisplayFunc(draw);
+	glutTimerFunc(0, timer, 0);
 
 	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -40,30 +52,60 @@ int GameEngine::init(int* argcp, char **argv) {
 
 
 	glutMainLoop();
+	return 0;
+}
+
+const Player* GameEngine::player() const {
+	return player_var;
+}
+
+const Map* GameEngine::map() const {
+	return map_var;
 }
 
 
 void GameEngine::update() {
 	//check keyboard values
 	//update based off of them
-	
-
-	
-	//player->setCamera();
+		
+	player_var->setPos(0, 2, 0);
+	player_var->setRot(0, 0, 0);
 }
 
-void GameEngine::draw() {
+
+void drawFunc() {
 	//draw world
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
+	const unsigned int size = engine->map()->size();
+	const Player* player = engine->player();
+
 	//loop to each thing to draw
+	for (unsigned int x = 0; x < size; x++) {
+		for (unsigned int y = 0; y < size; y++) {
+			for (unsigned int z = 0; z < size; z++) {
+				if (engine->map()->get(x, y, z) != 0) {
+					player->setCamera();
+					glTranslatef((float) x -  (float) (size / 2) - player->x(),
+						(float) y - (float) (size / 2) - player->y(),
+						(float) z - (float) (size / 2) - player->z());
+					engine->drawCube();
+				}
+				else {
+					//don't draw cube
+				}
+			}
+		}
+	}
+		
+	//draw entities
+
 
 	glutSwapBuffers();
-	//draw entities
 }
 
 
-void GameEngine::reshape(int w, int h) {
+void reshapeFunc(int w, int h) {
 	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -71,10 +113,10 @@ void GameEngine::reshape(int w, int h) {
 	glMatrixMode(GL_MODELVIEW);
 }
 
-void GameEngine::timer(int) {
-	update(); //for animation
+void timerFunc(int) {
+	engine->update(); //for animation
 	glutPostRedisplay();
-	glutTimerFunc(1000 / 60, this->timer, 0);
+	glutTimerFunc(1000 / 60, timerFunc, 0);
 }
 
 
@@ -135,6 +177,6 @@ void GameEngine::drawCube() {
 
 
 void GameEngine::clean() {
-	delete player;
-	delete map;
+	delete player_var;
+	delete map_var;
 }

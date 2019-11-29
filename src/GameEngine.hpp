@@ -6,18 +6,21 @@ public:
 	GameEngine();
 	int init(int *argcp, char** argv);
 
-	void update();
-	void draw();
+	const Player* player() const;
+	const Map* map() const;
 
-	void reshape(int w, int h);
-	void timer(int);
+	void update();
 
 	void drawSquare();
 	void drawCube();
 
 	void clean();
 private:
-	Player* player;
-	Map* map;
+	Player* player_var;
+	Map* map_var;
 	
+	//funciton pointers
+	void (*reshape)(int, int);
+	void (*draw)();
+	void (*timer)(int);
 };
