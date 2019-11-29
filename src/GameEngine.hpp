@@ -4,11 +4,20 @@
 class GameEngine {
 public:
 	GameEngine();
-	void init();
+	int init(int *argcp, char** argv);
+
 	void update();
 	void draw();
+
+	void reshape(int w, int h);
+	void timer(int);
+
+	void drawSquare();
+	void drawCube();
+
 	void clean();
 private:
 	Player* player;
 	Map* map;
+	
 };
