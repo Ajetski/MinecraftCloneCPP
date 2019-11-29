@@ -1,7 +1,7 @@
 #include "Player.hpp"
 #include <GL\glew.h>
 
-void Player::setCamera() {
+void Player::setCamera() const {
 	glLoadIdentity();
 	glTranslatef(pos_x, pos_y, pos_z);
 	glRotatef(rot_pitch, 1, 0, 0);

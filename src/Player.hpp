@@ -1,8 +1,10 @@
 class Player {
 public:
-	void setCamera();
+	void setCamera() const;
+
 	void setPos(float x, float y, float z);
 	void setRot(float pitch, float yaw, float roll);
+
 	const float& x() const;
 	const float& y() const;
 	const float& z() const;
