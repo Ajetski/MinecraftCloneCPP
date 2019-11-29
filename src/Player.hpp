@@ -9,6 +9,7 @@ public:
 	const float& pitch() const;
 	const float& roll() const;
 	const float& yaw() const;
+
 private:
 	float pos_x = 0, pos_y = 2, pos_z = 0;
 	float rot_pitch = 0, rot_yaw = 0, rot_roll = 0;
