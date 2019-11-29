@@ -1,7 +1,7 @@
 class Map {
 public:
 	Map();
-	unsigned int get(size_t x, size_t y, size_t z) const;
+	const unsigned int& get(size_t x, size_t y, size_t z) const;
 	void set(unsigned int value, size_t x, size_t y, size_t z);
 	//to do:
 	//implement map loading from files
@@ -9,7 +9,9 @@ public:
 	
 private:
 	unsigned int map[32][32][32] = {};
+
 	/*
+	// nested classes for multiple subscripting access
 	class MapWall {
 	public:
 

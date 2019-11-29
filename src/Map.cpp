@@ -14,7 +14,7 @@ Map::Map() {
 	}
 }
 
-unsigned int Map::get(size_t x, size_t y, size_t z) const {
+const unsigned int& Map::get(size_t x, size_t y, size_t z) const {
 	return map[x][y][z];
 }
 
