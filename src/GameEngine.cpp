@@ -12,6 +12,9 @@ GameEngine* engine;
 
 GameEngine::GameEngine() {
 	player_var = new Player;
+	player_var->setPos(0, 2, 0);
+	player_var->setRot(0, 0, 0);
+
 	map_var = new Map;
 
 	reshape = reshapeFunc;
@@ -19,6 +22,11 @@ GameEngine::GameEngine() {
 	timer = timerFunc;
 
 	engine = this;
+
+	w_key = false;
+	a_key = false;
+	s_key = false;
+	d_key = false;
 }
 
 int GameEngine::init(int* argcp, char **argv) {
@@ -44,9 +52,10 @@ int GameEngine::init(int* argcp, char **argv) {
 	//set glut/gl functions
 	glutReshapeFunc(reshape);
 	glutDisplayFunc(draw);
+	glutIdleFunc(draw);
 	glutTimerFunc(0, timer, 0);
 
-	glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+	glClearColor(0.1f, 0.6f, 1.0f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
 
@@ -67,9 +76,43 @@ const Map* GameEngine::map() const {
 void GameEngine::update() {
 	//check keyboard values
 	//update based off of them
-		
-	player_var->setPos(0, 2, 0);
-	player_var->setRot(0, 0, 0);
+	
+	handleKeyPress();
+
+	if (w_key) {
+		player_var->deltaZ(-1);
+		std::cout << "w pressed" << std::endl;
+		std::cout << player_var->z() << std::endl;
+	}
+	if (a_key)
+		player_var->deltaX(-.1f);
+	if (s_key)
+		player_var->deltaZ(.1f);
+	if (d_key)
+		player_var->deltaX(.1f);
+}
+
+void GameEngine::handleKeyPress() {
+	if (GetAsyncKeyState('W') & 0x8000)
+		w_key = true;
+	else
+		w_key = false;
+
+	if (GetAsyncKeyState('A') & 0x8000)
+		a_key = true;
+	else
+		a_key = false;
+
+	if (GetAsyncKeyState('S') & 0x8000)
+		s_key = true;
+	else
+		s_key = false;
+
+	if (GetAsyncKeyState('D') & 0x8000)
+		d_key = true;
+	else
+		d_key = false;
+
 }
 
 
@@ -136,38 +179,38 @@ void GameEngine::drawSquare() {
 
 void GameEngine::drawCube() {
 	glBegin(GL_QUADS);
-	//front
-	glColor3f(1.0, 0.0, 0.0);
-	glVertex3f(-1.0, 1.0, 1.0);
-	glVertex3f(-1.0, -1.0, 1.0);
-	glVertex3f(1.0, -1.0, 1.0);
-	glVertex3f(1.0, 1.0, 1.0);
-	//back
-	glColor3f(0.0, 1.0, 0.0);
-	glVertex3f(1.0, 1.0, -1.0);
-	glVertex3f(1.0, -1.0, -1.0);
-	glVertex3f(-1.0, -1.0, -1.0);
-	glVertex3f(-1.0, 1.0, -1.0);
-	//right
-	glColor3f(0.0, 0.0, 1.0);
-	glVertex3f(1.0, 1.0, 1.0);
-	glVertex3f(1.0, -1.0, 1.0);
-	glVertex3f(1.0, -1.0, -1.0);
-	glVertex3f(1.0, 1.0, -1.0);
-	//left
-	glColor3f(1.0, 1.0, 0.0);
-	glVertex3f(-1.0, 1.0, -1.0);
-	glVertex3f(-1.0, -1.0, -1.0);
-	glVertex3f(-1.0, -1.0, 1.0);
-	glVertex3f(-1.0, 1.0, 1.0);
 	//top
-	glColor3f(0.0, 1.0, 1.0);
+	glColor3f(0.2461f, 0.5039f, 0.1562f);
+	glVertex3f(-1.0, 1.0, 1.0);
+	glVertex3f(-1.0, -1.0, 1.0);
+	glVertex3f(1.0, -1.0, 1.0);
+	glVertex3f(1.0, 1.0, 1.0);
+	//?
+	glColor3f(.588235f, 0.29411f, 0.0);
+	glVertex3f(1.0, 1.0, -1.0);
+	glVertex3f(1.0, -1.0, -1.0);
+	glVertex3f(-1.0, -1.0, -1.0);
+	glVertex3f(-1.0, 1.0, -1.0);
+	//?
+	glColor3f(.588235f, 0.29411f, 0.0);
+	glVertex3f(1.0, 1.0, 1.0);
+	glVertex3f(1.0, -1.0, 1.0);
+	glVertex3f(1.0, -1.0, -1.0);
+	glVertex3f(1.0, 1.0, -1.0);
+	//?
+	glColor3f(.588235f, 0.29411f, 0.0);
+	glVertex3f(-1.0, 1.0, -1.0);
+	glVertex3f(-1.0, -1.0, -1.0);
+	glVertex3f(-1.0, -1.0, 1.0);
+	glVertex3f(-1.0, 1.0, 1.0);
+	//?
+	glColor3f(.588235f, 0.29411f, 0.0);
 	glVertex3f(-1.0, 1.0, -1.0);
 	glVertex3f(-1.0, 1.0, 1.0);
 	glVertex3f(1.0, 1.0, 1.0);
 	glVertex3f(1.0, 1.0, -1.0);
-	//bottom
-	glColor3f(1.0, 0.0, 1.0);
+	//?
+	glColor3f(.588235f, 0.29411f, 0.0);
 	glVertex3f(-1.0, -1.0, -1.0);
 	glVertex3f(-1.0, -1.0, 1.0);
 	glVertex3f(1.0, -1.0, 1.0);

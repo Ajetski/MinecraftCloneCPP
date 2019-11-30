@@ -10,6 +10,7 @@ public:
 	const Map* map() const;
 
 	void update();
+	void handleKeyPress();
 
 	void drawSquare();
 	void drawCube();
@@ -23,4 +24,7 @@ private:
 	void (*reshape)(int, int);
 	void (*draw)();
 	void (*timer)(int);
+
+	//keyboard bools
+	bool w_key, a_key, s_key, d_key;
 };
