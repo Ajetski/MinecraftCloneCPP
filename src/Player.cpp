@@ -6,7 +6,7 @@ void Player::setCamera() const {
 	glTranslatef(pos_x, pos_y, pos_z);
 	glRotatef(rot_pitch, 1, 0, 0);
 	glRotatef(rot_yaw, 0, 1, 0);
-	glRotatef(rot_roll, 0, 0, 1);
+	//glRotatef(rot_roll, 0, 0, 1);
 }
 
 void Player::setPos(float x, float y, float z) {
@@ -15,10 +15,10 @@ void Player::setPos(float x, float y, float z) {
 	pos_z = z;
 }
 
-void Player::setRot(float pitch, float yaw, float roll) {
+void Player::setRot(float pitch, float yaw /*, float roll*/) {
 	rot_pitch = pitch;
 	rot_yaw = yaw;
-	rot_roll = roll;
+	//rot_roll = roll;
 }
 
 void Player::deltaX(float x) {
@@ -49,9 +49,10 @@ const float& Player::pitch() const {
 	return rot_pitch;
 }
 
+/*
 const float& Player::roll() const {
 	return rot_roll;
-}
+}*/
 
 const float& Player::yaw() const {
 	return rot_yaw;

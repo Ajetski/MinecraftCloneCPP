@@ -13,7 +13,7 @@ GameEngine* engine;
 GameEngine::GameEngine() {
 	player_var = new Player;
 	player_var->setPos(0, 2, 0);
-	player_var->setRot(0, 0, 0);
+	player_var->setRot(0, 0);
 
 	map_var = new Map;
 
