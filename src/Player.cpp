@@ -21,6 +21,18 @@ void Player::setRot(float pitch, float yaw, float roll) {
 	rot_roll = roll;
 }
 
+void Player::deltaX(float x) {
+	pos_x += x;
+}
+
+void Player::deltaY(float y) {
+	pos_y += y;
+}
+
+void Player::deltaZ(float z) {
+	pos_z += z;
+}
+
 const float& Player::x() const {
 	return pos_x;
 }

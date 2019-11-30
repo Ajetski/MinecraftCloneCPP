@@ -5,6 +5,10 @@ public:
 	void setPos(float x, float y, float z);
 	void setRot(float pitch, float yaw, float roll);
 
+	void deltaX(float x);
+	void deltaY(float z);
+	void deltaZ(float z);
+
 	const float& x() const;
 	const float& y() const;
 	const float& z() const;
