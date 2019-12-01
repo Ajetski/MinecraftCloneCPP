@@ -3,12 +3,16 @@
 #include <GL\freeglut.h>
 #include <iostream>
 #include "GameEngine.hpp"
+#include <cmath>
 
 void reshapeFunc(int, int);
 void drawFunc();
 void timerFunc(int);
 
 GameEngine* engine;
+bool* temp;
+float z = -5;
+const float PI = 3.1415928479323846;
 
 GameEngine::GameEngine() {
 	player_var = new Player;
@@ -22,11 +26,18 @@ GameEngine::GameEngine() {
 	timer = timerFunc;
 
 	engine = this;
+	temp = &a_key;
 
 	w_key = false;
 	a_key = false;
 	s_key = false;
 	d_key = false;
+	left_key = false;
+	right_key = false;
+	up_key = false;
+	down_key = false;
+	shift_key = false;
+	ctrl_key = false;
 }
 
 int GameEngine::init(int* argcp, char **argv) {
@@ -79,17 +90,29 @@ void GameEngine::update() {
 	
 	handleKeyPress();
 
-	if (w_key) {
-		player_var->deltaZ(-1);
-		std::cout << "w pressed" << std::endl;
-		std::cout << player_var->z() << std::endl;
-	}
+	float movementSpeed = .25;
+	//float rotateSpeed = ;
+
+	if (w_key)
+		player_var->deltaZ(-movementSpeed);
 	if (a_key)
-		player_var->deltaX(-.1f);
+		player_var->deltaX(-movementSpeed);
 	if (s_key)
-		player_var->deltaZ(.1f);
+		player_var->deltaZ(movementSpeed);
 	if (d_key)
-		player_var->deltaX(.1f);
+		player_var->deltaX(movementSpeed);
+	if (shift_key)
+		player_var->deltaY(movementSpeed);
+	if (ctrl_key)
+		player_var->deltaY(-movementSpeed);
+	if (left_key)
+		player_var->deltaYaw(movementSpeed);
+	if (right_key)
+		player_var->deltaYaw(-movementSpeed);
+	if (up_key)
+		player_var->deltaPitch(-movementSpeed);
+	if (down_key)
+		player_var->deltaPitch(movementSpeed);
 }
 
 void GameEngine::handleKeyPress() {
@@ -97,21 +120,42 @@ void GameEngine::handleKeyPress() {
 		w_key = true;
 	else
 		w_key = false;
-
 	if (GetAsyncKeyState('A') & 0x8000)
 		a_key = true;
 	else
 		a_key = false;
-
 	if (GetAsyncKeyState('S') & 0x8000)
 		s_key = true;
 	else
 		s_key = false;
-
 	if (GetAsyncKeyState('D') & 0x8000)
 		d_key = true;
 	else
 		d_key = false;
+	if (GetKeyState(VK_SHIFT) & 0x8000)
+		shift_key = true;
+	else
+		shift_key = false;
+	if (GetKeyState(VK_CONTROL) & 0x8000)
+		ctrl_key = true;
+	else
+		ctrl_key = false;
+	if (GetKeyState(VK_LEFT) & 0x8000)
+		left_key = true;
+	else
+		left_key = false;
+	if (GetKeyState(VK_RIGHT) & 0x8000)
+		right_key = true;
+	else
+		right_key = false;
+	if (GetKeyState(VK_UP) & 0x8000)
+		up_key = true;
+	else
+		up_key = false;
+	if (GetKeyState(VK_DOWN) & 0x8000)
+		down_key = true;
+	else
+		down_key = false;
 
 }
 
@@ -120,27 +164,25 @@ void drawFunc() {
 	//draw world
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	const unsigned int size = engine->map()->size();
+	/*
+	const unsigned int size = engine->map()->size();*/
 	const Player* player = engine->player();
+	float xRotScalar = cos(PI * player->yaw() / 180);
+	float zRotScalar = sin(PI * player->yaw() / 180);
 
 	//loop to each thing to draw
-	for (unsigned int x = 0; x < size; x++) {
-		for (unsigned int y = 0; y < size; y++) {
-			for (unsigned int z = 0; z < size; z++) {
-				if (engine->map()->get(x, y, z) != 0) {
-					player->setCamera();
-					glTranslatef((float) x -  (float) (size / 2) - player->x(),
-						(float) y - (float) (size / 2) - player->y(),
-						(float) z - (float) (size / 2) - player->z());
-					engine->drawCube();
-				}
-				else {
-					//don't draw cube
-				}
-			}
+	for(int x = -3; x <= 3; x++){
+		for (int z = -3; z <= -3; z++) {
+			glLoadIdentity();
+			//glRotatef(-player->yaw(), 0, 1, 0);
+			glRotatef(-player->yaw(), 0, 1, 0);
+			glRotatef(-player->pitch(), xRotScalar, 0, -zRotScalar);
+			glTranslatef(x, 0, z);
+			glTranslatef(-player->x(), -player->y(), -player->z());
+			engine->drawCube();
 		}
 	}
-		
+
 	//draw entities
 
 
@@ -179,37 +221,37 @@ void GameEngine::drawSquare() {
 
 void GameEngine::drawCube() {
 	glBegin(GL_QUADS);
+	//front
+	glColor3f(.588235f, 0.29411f, 0.0);
+	glVertex3f(-1.0, 1.0, 1.0);
+	glVertex3f(-1.0, -1.0, 1.0);
+	glVertex3f(1.0, -1.0, 1.0);
+	glVertex3f(1.0, 1.0, 1.0);
+	//back
+	glColor3f(.588235f, 0.29411f, 0.0);
+	glVertex3f(1.0, 1.0, -1.0);
+	glVertex3f(1.0, -1.0, -1.0);
+	glVertex3f(-1.0, -1.0, -1.0);
+	glVertex3f(-1.0, 1.0, -1.0);
+	//left
+	glColor3f(.588235f, 0.29411f, 0.0);
+	glVertex3f(1.0, 1.0, 1.0);
+	glVertex3f(1.0, -1.0, 1.0);
+	glVertex3f(1.0, -1.0, -1.0);
+	glVertex3f(1.0, 1.0, -1.0);
+	//right
+	glColor3f(.588235f, 0.29411f, 0.0);
+	glVertex3f(-1.0, 1.0, -1.0);
+	glVertex3f(-1.0, -1.0, -1.0);
+	glVertex3f(-1.0, -1.0, 1.0);
+	glVertex3f(-1.0, 1.0, 1.0);
+	//bottom
+	glColor3f(0.2461f, 0.5039f, 0.1562f); // ?
+	glVertex3f(-1.0, 1.0, -1.0);
+	glVertex3f(-1.0, 1.0, 1.0);
+	glVertex3f(1.0, 1.0, 1.0);
+	glVertex3f(1.0, 1.0, -1.0);
 	//top
-	glColor3f(0.2461f, 0.5039f, 0.1562f);
-	glVertex3f(-1.0, 1.0, 1.0);
-	glVertex3f(-1.0, -1.0, 1.0);
-	glVertex3f(1.0, -1.0, 1.0);
-	glVertex3f(1.0, 1.0, 1.0);
-	//?
-	glColor3f(.588235f, 0.29411f, 0.0);
-	glVertex3f(1.0, 1.0, -1.0);
-	glVertex3f(1.0, -1.0, -1.0);
-	glVertex3f(-1.0, -1.0, -1.0);
-	glVertex3f(-1.0, 1.0, -1.0);
-	//?
-	glColor3f(.588235f, 0.29411f, 0.0);
-	glVertex3f(1.0, 1.0, 1.0);
-	glVertex3f(1.0, -1.0, 1.0);
-	glVertex3f(1.0, -1.0, -1.0);
-	glVertex3f(1.0, 1.0, -1.0);
-	//?
-	glColor3f(.588235f, 0.29411f, 0.0);
-	glVertex3f(-1.0, 1.0, -1.0);
-	glVertex3f(-1.0, -1.0, -1.0);
-	glVertex3f(-1.0, -1.0, 1.0);
-	glVertex3f(-1.0, 1.0, 1.0);
-	//?
-	glColor3f(.588235f, 0.29411f, 0.0);
-	glVertex3f(-1.0, 1.0, -1.0);
-	glVertex3f(-1.0, 1.0, 1.0);
-	glVertex3f(1.0, 1.0, 1.0);
-	glVertex3f(1.0, 1.0, -1.0);
-	//?
 	glColor3f(.588235f, 0.29411f, 0.0);
 	glVertex3f(-1.0, -1.0, -1.0);
 	glVertex3f(-1.0, -1.0, 1.0);

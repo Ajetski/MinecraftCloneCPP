@@ -26,5 +26,6 @@ private:
 	void (*timer)(int);
 
 	//keyboard bools
-	bool w_key, a_key, s_key, d_key;
+	bool w_key, a_key, s_key, d_key, shift_key, ctrl_key,
+		left_key, right_key, up_key, down_key;
 };
