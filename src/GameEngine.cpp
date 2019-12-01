@@ -91,7 +91,7 @@ void GameEngine::update() {
 	handleKeyPress();
 
 	float movementSpeed = .25;
-	//float rotateSpeed = ;
+	float rotateSpeed = .85;
 
 	if (w_key)
 		player_var->deltaZ(-movementSpeed);
@@ -106,13 +106,13 @@ void GameEngine::update() {
 	if (ctrl_key)
 		player_var->deltaY(-movementSpeed);
 	if (left_key)
-		player_var->deltaYaw(movementSpeed);
+		player_var->deltaYaw(rotateSpeed);
 	if (right_key)
-		player_var->deltaYaw(-movementSpeed);
+		player_var->deltaYaw(-rotateSpeed);
 	if (up_key)
-		player_var->deltaPitch(-movementSpeed);
+		player_var->deltaPitch(-rotateSpeed);
 	if (down_key)
-		player_var->deltaPitch(movementSpeed);
+		player_var->deltaPitch(rotateSpeed);
 }
 
 void GameEngine::handleKeyPress() {
