@@ -4,15 +4,19 @@
 #include <iostream>
 #include "GameEngine.hpp"
 #include <cmath>
+#include <WinUser.h>
 
 void reshapeFunc(int, int);
 void drawFunc();
 void timerFunc(int);
+void motionFunc(int, int);
+
 
 GameEngine* engine;
 bool* temp;
 float z = -5;
 const float PI = 3.1415928479323846;
+int lastX = -1, lastY= -1, currX = -1, currY = -1;
 
 GameEngine::GameEngine() {
 	player_var = new Player;
@@ -65,6 +69,7 @@ int GameEngine::init(int* argcp, char **argv) {
 	glutDisplayFunc(draw);
 	glutIdleFunc(draw);
 	glutTimerFunc(0, timer, 0);
+	glutPassiveMotionFunc(motionFunc);
 
 	glClearColor(0.1f, 0.6f, 1.0f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -87,32 +92,58 @@ const Map* GameEngine::map() const {
 void GameEngine::update() {
 	//check keyboard values
 	//update based off of them
-	
+
 	handleKeyPress();
 
 	float movementSpeed = .25;
-	float rotateSpeed = .85;
+	
 
-	if (w_key)
-		player_var->deltaZ(-movementSpeed);
-	if (a_key)
-		player_var->deltaX(-movementSpeed);
-	if (s_key)
-		player_var->deltaZ(movementSpeed);
-	if (d_key)
-		player_var->deltaX(movementSpeed);
+	float sinScalar = sin(PI * player_var->yaw() / 180);
+	float cosScalar = cos(PI * player_var->yaw() / 180);
+
+	//movements w WASD
+	if (w_key) {
+		player_var->deltaZ(-movementSpeed * cosScalar);
+		player_var->deltaX(-movementSpeed * sinScalar);
+	}
+	if (a_key) {
+		player_var->deltaZ(movementSpeed * sinScalar);
+		player_var->deltaX(-movementSpeed * cosScalar);
+	}
+	if (s_key) {
+		player_var->deltaZ(movementSpeed * cosScalar);
+		player_var->deltaX(movementSpeed * sinScalar);
+	}
+	if (d_key) {
+		player_var->deltaZ(-movementSpeed * sinScalar);
+		player_var->deltaX(movementSpeed * cosScalar);
+	}
 	if (shift_key)
 		player_var->deltaY(movementSpeed);
 	if (ctrl_key)
 		player_var->deltaY(-movementSpeed);
+
+	//rotations w arrows
+	float arrowsRotateSpeed = .85;
 	if (left_key)
-		player_var->deltaYaw(rotateSpeed);
+		player_var->deltaYaw(arrowsRotateSpeed);
 	if (right_key)
-		player_var->deltaYaw(-rotateSpeed);
+		player_var->deltaYaw(-arrowsRotateSpeed);
 	if (up_key)
-		player_var->deltaPitch(-rotateSpeed);
+		player_var->deltaPitch(-arrowsRotateSpeed);
 	if (down_key)
-		player_var->deltaPitch(rotateSpeed);
+		player_var->deltaPitch(arrowsRotateSpeed);
+
+	//rotations w mouse
+	float mouseRotateSpeed = .35;
+	if (lastX != currX) {
+		player_var->deltaYaw((lastX - currX) * mouseRotateSpeed);
+		lastX = currX;
+	}
+	if (lastY != currY) {
+		player_var->deltaPitch((currY - lastY) * mouseRotateSpeed);
+		lastY = currY;
+	}
 }
 
 void GameEngine::handleKeyPress() {
@@ -172,7 +203,7 @@ void drawFunc() {
 
 	//loop to each thing to draw
 	for(int x = -3; x <= 3; x++){
-		for (int z = -3; z <= -3; z++) {
+		for (int z = -3; z <= 3; z++) {
 			glLoadIdentity();
 			//glRotatef(-player->yaw(), 0, 1, 0);
 			glRotatef(-player->yaw(), 0, 1, 0);
@@ -194,7 +225,7 @@ void reshapeFunc(int w, int h) {
 	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(60.0, 1.0, 1.0, 15.0);
+	gluPerspective(60.0, 1.0, .01, 64.0);
 	glMatrixMode(GL_MODELVIEW);
 }
 
@@ -202,6 +233,17 @@ void timerFunc(int) {
 	engine->update(); //for animation
 	glutPostRedisplay();
 	glutTimerFunc(1000 / 60, timerFunc, 0);
+}
+
+
+void motionFunc(int x, int y) {
+	//SetCursorPos(glutGet(GLUT_SCREEN_WIDTH) / 2, glutGet(GLUT_SCREEN_HEIGHT) / 2);
+	currX = x; currY = y;
+	if (lastX == -1 && lastY == -1) {
+		lastX = x;
+		lastY = y;
+		return;
+	}
 }
 
 
