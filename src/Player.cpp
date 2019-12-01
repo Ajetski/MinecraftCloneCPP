@@ -35,10 +35,18 @@ void Player::deltaZ(float z) {
 
 void Player::deltaPitch(float pitch) {
 	rot_pitch += pitch;
+	if (rot_pitch > 360)
+		rot_pitch -= 360;
+	else if (rot_pitch < 0)
+		rot_pitch += 360;
 }
 
 void Player::deltaYaw(float yaw) {
 	rot_yaw += yaw;
+	if (rot_yaw > 360)
+		rot_yaw -= 360;
+	else if (rot_yaw < 0)
+		rot_yaw += 360;
 }
 
 const float& Player::x() const {
