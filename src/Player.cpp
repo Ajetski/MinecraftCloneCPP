@@ -33,6 +33,14 @@ void Player::deltaZ(float z) {
 	pos_z += z;
 }
 
+void Player::deltaPitch(float pitch) {
+	rot_pitch += pitch;
+}
+
+void Player::deltaYaw(float yaw) {
+	rot_yaw += yaw;
+}
+
 const float& Player::x() const {
 	return pos_x;
 }

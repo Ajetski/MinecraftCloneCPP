@@ -9,6 +9,9 @@ public:
 	void deltaY(float z);
 	void deltaZ(float z);
 
+	void deltaPitch(float pitch);
+	void deltaYaw(float yaw);
+
 	const float& x() const;
 	const float& y() const;
 	const float& z() const;
