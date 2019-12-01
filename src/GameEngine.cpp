@@ -176,7 +176,7 @@ void drawFunc() {
 			glLoadIdentity();
 			//glRotatef(-player->yaw(), 0, 1, 0);
 			glRotatef(-player->yaw(), 0, 1, 0);
-			glRotatef(-player->pitch(), xRotScalar, 0, -zRotScalar);
+			glRotatef(player->pitch(), xRotScalar, 0, -zRotScalar);
 			glTranslatef(x, 0, z);
 			glTranslatef(-player->x(), -player->y(), -player->z());
 			engine->drawCube();
