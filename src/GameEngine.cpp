@@ -13,10 +13,12 @@ void motionFunc(int, int);
 
 
 GameEngine* engine;
-bool* temp;
 float z = -5;
 const float PI = 3.1415928479323846;
 int lastX = -1, lastY= -1, currX = -1, currY = -1;
+bool resetMouse = false;
+
+int screenHeight, screenWidth, centerX, centerY;
 
 GameEngine::GameEngine() {
 	player_var = new Player;
@@ -30,7 +32,6 @@ GameEngine::GameEngine() {
 	timer = timerFunc;
 
 	engine = this;
-	temp = &a_key;
 
 	w_key = false;
 	a_key = false;
@@ -70,10 +71,13 @@ int GameEngine::init(int* argcp, char **argv) {
 	glutIdleFunc(draw);
 	glutTimerFunc(0, timer, 0);
 	glutPassiveMotionFunc(motionFunc);
+	//glutSetCursor(GLUT_CURSOR_NONE);
+	glutFullScreen();
 
 	glClearColor(0.1f, 0.6f, 1.0f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_MULTISAMPLE);
+
 
 
 	glutMainLoop();
@@ -136,13 +140,34 @@ void GameEngine::update() {
 
 	//rotations w mouse
 	float mouseRotateSpeed = .35;
-	if (lastX != currX) {
-		player_var->deltaYaw((lastX - currX) * mouseRotateSpeed);
-		lastX = currX;
+	if (!resetMouse) {
+		if (lastX != currX) {
+			player_var->deltaYaw((lastX - currX) * mouseRotateSpeed);
+			lastX = currX;
+		}
+		if (lastY != currY) {
+			player_var->deltaPitch((currY - lastY) * mouseRotateSpeed);
+			lastY = currY;
+		}
 	}
-	if (lastY != currY) {
-		player_var->deltaPitch((currY - lastY) * mouseRotateSpeed);
-		lastY = currY;
+
+	int screenHeight = GetSystemMetrics(SM_CXSCREEN);
+	int screenWidth = GetSystemMetrics(SM_CYSCREEN);
+	int centerX = screenHeight / 2;
+	int centerY = screenWidth / 2;
+
+	if (!resetMouse && (currX > screenHeight - 25 || currX < 25
+		|| currY > screenWidth - 25 || currY < 25 )) {
+		resetMouse = true;
+		SetCursorPos(centerX, centerY);
+		lastX = centerX;
+		lastX = centerY;
+		resetMouse = false;
+	}
+	
+	if (resetMouse && currX > centerX - 25 && currX < centerX + 25 &&
+		currY > centerY - 25 && currY < centerY + 25) {
+		resetMouse = false;
 	}
 }
 
@@ -192,6 +217,11 @@ void GameEngine::handleKeyPress() {
 
 
 void drawFunc() {
+	if(!resetMouse)
+		glClearColor(0.1f, 0.6f, 1.0f, 1.0f);
+	else
+		glClearColor(0.7f, 0.5f, 0.1f, 1.0f);
+
 	//draw world
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
@@ -237,12 +267,12 @@ void timerFunc(int) {
 
 
 void motionFunc(int x, int y) {
-	//SetCursorPos(glutGet(GLUT_SCREEN_WIDTH) / 2, glutGet(GLUT_SCREEN_HEIGHT) / 2);
-	currX = x; currY = y;
-	if (lastX == -1 && lastY == -1) {
-		lastX = x;
-		lastY = y;
-		return;
+	if (!resetMouse) {
+		currX = x; currY = y;
+		if (lastX == -1 && lastY == -1 && !resetMouse) {
+			lastX = x;
+			lastY = y;
+		}
 	}
 }
 
@@ -288,7 +318,10 @@ void GameEngine::drawCube() {
 	glVertex3f(-1.0, -1.0, 1.0);
 	glVertex3f(-1.0, 1.0, 1.0);
 	//bottom
-	glColor3f(0.2461f, 0.5039f, 0.1562f); // ?
+	if (resetMouse)
+		glColor3f(1.0f, 0.2039f, 0.1562f);
+	else
+		glColor3f(0.2461f, 0.5039f, 0.1562f); // ?
 	glVertex3f(-1.0, 1.0, -1.0);
 	glVertex3f(-1.0, 1.0, 1.0);
 	glVertex3f(1.0, 1.0, 1.0);
