@@ -36,9 +36,9 @@ void Player::deltaZ(float z) {
 void Player::deltaPitch(float pitch) {
 	rot_pitch += pitch;
 	if (rot_pitch > 180)
-		rot_pitch -= 360;
+		rot_pitch = 180;
 	else if (rot_pitch < -180)
-		rot_pitch += 360;
+		rot_pitch = -180;
 }
 
 void Player::deltaYaw(float yaw) {
