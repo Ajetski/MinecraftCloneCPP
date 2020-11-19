@@ -2,7 +2,7 @@
 #include <GL\glew.h>
 #include <GL\freeglut.h>
 #include <iostream>
-#include "GameEngine.hpp"
+#include "GameEngine.h"
 #include <cmath>
 #include <WinUser.h>
 

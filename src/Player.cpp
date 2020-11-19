@@ -1,4 +1,4 @@
-#include "Player.hpp"
+#include "Player.h"
 #include <GL\glew.h>
 
 void Player::setCamera() const {

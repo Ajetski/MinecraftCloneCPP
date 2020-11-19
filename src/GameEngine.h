@@ -1,5 +1,5 @@
-#include "Player.hpp"
-#include "Map.hpp"
+#include "Player.h"
+#include "Map.h"
 
 class GameEngine {
 public:

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "GameEngine.hpp"
+#include "GameEngine.h"
 
 //#define STD_IMAGE_IMPLEMENTATION
 //#include "libraries/std_image/stb_image.h"

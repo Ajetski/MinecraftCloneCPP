@@ -1,4 +1,4 @@
-#include "Map.hpp"
+#include "Map.h"
 
 Map::Map() {
 	chunkSize = 32;
